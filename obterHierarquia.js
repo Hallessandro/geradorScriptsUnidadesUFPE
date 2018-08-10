@@ -1,23 +1,32 @@
-const { Pool, Client } = require('pg')
-
-const client = new Client({
-    user: 'comum_user',
-    host: 'ufpe',
-    database: 'preprod_sistemas_comum',
-    password: 'comum_user',
-    port: 15432,
-  })
-  client.connect()
+var geradorHierarquia = require('./geradorUpdateHierarquia'); 
+var csv = require('csvtojson'); 
+var fs = require('fs');
  
-
-module.exports.getHierarquia = function(codigo_unidade){
-    client.query('SELECT HIERARQUIA FROM COMUM.UNIDADE WHERE CODIGO_UNIDADE =' + codigo_unidade)
-        .then(res=> {
-            let resultado = res.rows[0].hierarquia;
-            client.end();
-            console.log(resultado);
-            return resultado;
-        })
-        .catch(err => console.error(err));
+function criarArquivoResultado(){
+    fs.writeFile(__dirname + "hierarquia.sql","--Scripts gerados",function(err){
+        if(err)
+          console.error(err);
+    });
 }
-  
+
+function addConteudoArquivo(conteudo){
+    fs.appendFile(__dirname + "hierarquia.sql", conteudo,function(err){
+        if(err)
+          console.error(err);
+    });
+}
+
+function processarArquivo(){
+    csv()
+        .fromFile(__dirname + "/dados.csv")
+        .then( (data) => {
+            criarArquivoResultado();
+            for (let cont in data) {
+                if(data[cont].acao === 'INCLUIR'){
+                    addConteudoArquivo(geradorHierarquia.geraUpdateHierarquia(data[cont].codUnidade, data[cont].siapecadPai));
+                }
+            }
+    });
+}  
+
+processarArquivo();

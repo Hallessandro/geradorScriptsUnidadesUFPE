@@ -1,6 +1,5 @@
 var csv = require('csvtojson'); 
 var fs = require('fs');
-var { Client } = require('pg');
 var geradorInsert = require("./geradorInsert");
 var geradorUpdate = require("./geradorUpdate");
 
@@ -16,31 +15,6 @@ function addConteudoArquivo(conteudo){
         if(err)
           console.error(err);
     });
-}
-
-function obterHierarquia(codigo_unidade){
-    const client = new Client({
-        user: 'comum_user',
-        host: 'ufpe',
-        database: 'preprod_sistemas_comum',
-        password: 'comum_user',
-        port: 15432,
-    });
-    client.connect();
-    client.query('SELECT HIERARQUIA FROM COMUM.UNIDADE WHERE CODIGO_UNIDADE =' + codigo_unidade)
-    .then(res=> {
-        client.end();
-        let resultado = res.rows[0].hierarquia;
-        teste(resultado);
-    })
-    .catch(err => {
-        cliente.end();
-        console.error(err);
-    });
-}
-
-function gerarUpdateHierarquia(res){
-    console.log("TESTE" + res);
 }
 
 function processarArquivo(){
@@ -62,8 +36,8 @@ function processarArquivo(){
                          data[cont].codUnidade, data[cont].nome, data[cont].sigla, data[cont].siapecadGestora,
                          organizacional, orcamentaria, patrimonial, licitacoes, licitacoesEng, academica, metas, protocoloCentral
                         ));
-                }else if(data[cont].acao === 'ALTERAR'){
-                    addConteudoArquivo(geradorUpdate.geraUpdate(data[cont].siapecad, data[cont].nome, data[cont].sigla));
+                }else if(data[cont].acao === 'ALTERAR'){ 
+                    addConteudoArquivo(geradorUpdate.geraUpdate(data[cont].siapecad, data[cont].nome, data[cont].sigla, orcamentaria, licitacoes, licitacoesEng, patrimonial, academica, metas));
                 }
             }
     });

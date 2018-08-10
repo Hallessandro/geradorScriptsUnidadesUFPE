@@ -1,7 +1,9 @@
-module.exports.geraUpdateHierarquia = function (siapecad, nome, sigla){
+module.exports.geraUpdateHierarquia = function (codUnidade, siapecadPai){
     let update = `
---${nome}
-UPDATE comum.unidade SET hierarquia='.605.615.1169.',hierarquia_organizacional='.605.615.1169.' WHERE id_unidade=(SELECT ID_UNIDADE FROM COMUM.UNIDADE WHERE CODIGO_SIAPECAD = ${siapecad});
+--${codUnidade}
+UPDATE comum.UNIDADE SET 
+	HIERARQUIA = CAST((SELECT HIERARQUIA FROM comum.UNIDADE WHERE CODIGO_SIAPECAD = ${siapecadPai})||(SELECT ID_UNIDADE FROM comum.UNIDADE WHERE CODIGO_UNIDADE = ${codUnidade})||'.' AS varchar(50)), 
+	HIERARQUIA_ORGANIZACIONAL = CAST((SELECT HIERARQUIA FROM comum.UNIDADE WHERE CODIGO_SIAPECAD = ${siapecadPai})||(SELECT ID_UNIDADE FROM comum.UNIDADE WHERE CODIGO_UNIDADE = ${codUnidade})||'.' AS varchar(50)) WHERE CODIGO_UNIDADE = ${codUnidade}; 
     `;
     return update;
 };
