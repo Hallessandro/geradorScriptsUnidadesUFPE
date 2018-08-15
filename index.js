@@ -37,7 +37,7 @@ function processarArquivo(){
                          organizacional, orcamentaria, patrimonial, licitacoes, licitacoesEng, academica, metas, protocoloCentral
                         ));
                 }else if(data[cont].acao === 'ALTERAR'){ 
-                    addConteudoArquivo(geradorUpdate.geraUpdate(data[cont].siapecad, data[cont].nome, data[cont].sigla, orcamentaria, licitacoes, licitacoesEng, patrimonial, academica, metas));
+                    addConteudoArquivo(geradorUpdate.geraUpdate(data[cont].siapecad, data[cont].nome, data[cont].sigla, orcamentaria, licitacoes, licitacoesEng, patrimonial, academica, metas, data[cont].codUnidade, data[cont].siapecadPai));
                 }
             }
     });
