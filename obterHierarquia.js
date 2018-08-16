@@ -22,8 +22,8 @@ function processarArquivo(){
         .then( (data) => {
             criarArquivoResultado();
             for (let cont in data) {
-                if(data[cont].acao === 'INCLUIR' || data[cont].acao === 'ALTERAR'){
-                    addConteudoArquivo(geradorHierarquia.geraUpdateHierarquia(data[cont].codUnidade, data[cont].siapecadPai));
+                if(data[cont].acao === 'INCLUIR' || data[cont].acao === 'ALTERAR' || data[cont].acao === 'MANTER'){
+                    addConteudoArquivo(geradorHierarquia.geraUpdateHierarquia(data[cont].codUnidade, data[cont].siapecadPai, data[cont].siapecad));
                 }
             }
     });
