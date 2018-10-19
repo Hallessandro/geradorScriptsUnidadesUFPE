@@ -33,7 +33,7 @@ function processarArquivo(codigoBase){
         .then( (data) => {
             criarArquivoResultado();
             for (let cont in data) {
-                if(data[cont].acao === 'INCLUIR'){
+                if(data[cont].acao === 'INCLUIR' || data[cont].acao == 'MANTER'){
                     listaUnidades.push(data[cont].nome); 
                 }
             }
